@@ -1,0 +1,91 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Consistt/Ui/main/UnLeaked"))()
+
+
+library.rank = "User"
+local Wm = library:Watermark("Under the Light V2 | Created by Ahmed (DISCORD IS ahmedg) hit me up if u want anything done | v" .. library.version ..  " | " .. library:GetUsername() .. " | rank: " .. library.rank)
+local FpsWm = Wm:AddWatermark("fps: " .. library.fps)
+coroutine.wrap(function()
+    while wait(.75) do
+        FpsWm:Text("fps: " .. library.fps)
+    end
+end)()
+
+
+local Notif = library:InitNotifications()
+
+for i = 20,0,-1 do 
+    task.wait(0.05)
+    local LoadingXSX = Notif:Notify("Loading UNDER THE LIGHTS V2, please be patient.", 3, "")
+end 
+
+library.title = "UNDER THE LIGHTS V2 | MADE BY AHMED (DISCORD IS ahmedg)"
+
+library:Introduction()
+wait(1)
+local Init = library:Init()
+
+local Tab1 = Init:NewTab("Main")
+
+local targetSize = 5
+local getEnabled = true
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local CRangeL = character:WaitForChild("CRangeL")
+local CRangeR = character:WaitForChild("CRangeR")
+
+local function resizeParts()
+    if getEnabled then
+        game:GetService("RunService").Heartbeat:Connect(function()
+            CRangeL.Size = Vector3.new(targetSize, targetSize, targetSize)
+            CRangeR.Size = Vector3.new(targetSize, targetSize, targetSize)
+        end)
+    end
+end
+
+resizeParts()
+
+local Section1 = Tab1:NewSection("Magnets")
+
+local Toggle1 = Tab1:NewToggle("Enable Magnets", false, function(value)
+    getEnabled = value
+end):AddKeybind(Enum.KeyCode.RightControl)
+
+local Slider1 = Tab1:NewSlider("Magnet Range", "", true, "/", {min = 0, max = 50, default = 0}, function(value)
+    targetSize = value
+end)
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local jumpBoostAmount = 25
+local EnableJP = false
+local character, humanoid, humanoidRootPart
+
+local function checkCharacterExists()
+    character = player.Character or player.CharacterAdded:Wait()
+
+    humanoid = character:WaitForChild("Humanoid")
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    humanoid.StateChanged:Connect(function(_, newState)
+        if newState == Enum.HumanoidStateType.Jumping then
+            if EnableJP then
+                task.wait(0.01)
+                humanoidRootPart.Velocity = Vector3.new(humanoidRootPart.Velocity.X, humanoidRootPart.Velocity.Y + (jumpBoostAmount - 50))
+            end
+        end
+    end)
+end
+
+checkCharacterExists()
+
+player.CharacterAdded:Connect(checkCharacterExists)
+
+local Toggle1 = Tab1:NewToggle("Enable Jump Power", false, function(value)
+    EnableJP = value
+end):AddKeybind(Enum.KeyCode.RightControl)
+
+local Slider1 = Tab1:NewSlider("Jump Power Amount", "", true, "/", {min = 50, max = 100, default = 50}, function(value)
+    jumpBoostAmount = value
+end)
